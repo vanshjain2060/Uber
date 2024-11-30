@@ -2,11 +2,16 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const connectDB = require('./config/db');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+
+
+// Connect to MongoDB
+connectDB();
 
 // Middlewares
 app.use(cors());
