@@ -1,3 +1,4 @@
+const { get } = require('mongoose');
 const userModel = require('../models/user.model');
 const { createUser } = require('../services/user.service');
 const { validationResult } = require('express-validator');
@@ -46,6 +47,7 @@ const loginUser = async (req, res, next) => {
         }
 
         const token = user.generateAuthToken();
+        res.cookie('token', token, { httpOnly: true });
         res.status(200).json({ token, user });
     } catch (err) {
         console.error(err);
@@ -53,4 +55,8 @@ const loginUser = async (req, res, next) => {
     }
 }
 
-module.exports = { registerUser, loginUser };
+const getUserProfile = async (req, res, next) => {
+    res.status(200).json(req.user);
+}
+
+module.exports = { registerUser, loginUser , getUserProfile};

@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user.routes');
 
 dotenv.config();
@@ -16,6 +17,7 @@ connectDB();
 
 // Middlewares
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
