@@ -73,3 +73,45 @@ The request body must be a JSON object containing the following fields:
   }
 }
 ```
+### Endpoint: `/users/profile`
+
+### Description
+Fetches the profile information of the authenticated user. Requires a valid authentication token.
+
+### Method
+`GET`
+
+### Headers
+- **Authorization** (string, required): Bearer token for authentication.
+
+### Example Response
+```json
+{
+  "user": {
+    "_id": "user-id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com"
+  }
+}
+```
+
+### Endpoint: `/users/logout`
+
+### Description
+Logs out the authenticated user by invalidating the authentication token.
+
+### Method
+`POST`
+
+### Headers
+- **Authorization** (string, required): Bearer token for authentication.
+
+### Example Response
+```json
+{
+  "message": "Successfully logged out"
+}
+```
