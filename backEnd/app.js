@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
+const userRoutes = require('./routes/user.routes');
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ connectDB();
 
 // Middlewares
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 // Rate Limiting
@@ -24,15 +27,15 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Routes
 app.get('/', (req, res) => {
     res.send('Hello, Uber Clone App!');
 });
+app.use("/users", userRoutes);
+
 
 // Error Middleware to Handle unknow errors
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
