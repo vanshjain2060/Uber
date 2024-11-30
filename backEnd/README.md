@@ -8,7 +8,6 @@ Registers a new user by creating an account with the provided details. Returns a
 ### Method
 `POST`
 
-
 ### Required Data
 The request body must be a JSON object containing the following fields:
 
@@ -30,6 +29,36 @@ The request body must be a JSON object containing the following fields:
 }
 ```
 
+#### Example Response
+```json
+{
+  "token": "your-jwt-token",
+  "user": {
+    "_id": "user-id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com"
+  }
+}
+```
+
+### Login Route
+
+**Endpoint:** `/api/login`
+
+**Method:** `POST`
+
+**Description:** Authenticates a user and returns a JWT token.
+
+**Request Body:**
+```json
+{
+  "email": "johndoe@example.com",
+  "password": "yourpassword"
+}
+```
 #### Example Response
 ```json
 {
