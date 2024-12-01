@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/user.routes');
+const captainRoutes = require('./routes/captain.routes');
 
 dotenv.config();
 
@@ -34,7 +35,7 @@ app.get('/', (req, res) => {
     res.send('Hello, Uber Clone App!');
 });
 app.use("/users", userRoutes);
-
+app.use("/captains", captainRoutes);
 
 // Error Middleware to Handle unknow errors
 

@@ -1,4 +1,3 @@
-const { get } = require('mongoose');
 const userModel = require('../models/user.model');
 const { createUser } = require('../services/user.service');
 const { validationResult } = require('express-validator');
@@ -11,7 +10,10 @@ const registerUser = async (req, res, next) => {
             return res.status(400).json({ errors: error.array() });
         }
         const { fullname, email, password } = req.body;
-
+        const isEmailExist = await userModel.findOne({ email });
+        if (isEmailExist) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
         const hashedPassword = await userModel.hashPassword(password);
 
         const user = await createUser(

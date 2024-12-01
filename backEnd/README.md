@@ -115,3 +115,63 @@ Logs out the authenticated user by invalidating the authentication token.
   "message": "Successfully logged out"
 }
 ```
+### Endpoint: `/captains/register`
+
+### Description
+Registers a new captain by creating an account with the provided details. Returns an authentication token and the captain information upon successful registration.
+
+### Method
+`POST`
+
+### Required Data
+The request body must be a JSON object containing the following fields:
+
+- **fullname**
+  - **firstname** (string, required): First name of the captain. Must be at least 3 characters long.
+  - **lastname** (string, optional): Last name of the captain. Must be at least 3 characters long if provided.
+- **email** (string, required): Valid email address of the captain.
+- **password** (string, required): Password for the captain account. Must be at least 6 characters long.
+- **vehicle**
+  - **color** (string, required): Color of the vehicle.
+  - **plate** (string, required): License plate number of the vehicle.
+  - **capacity** (number, required): Capacity of the vehicle.
+  - **vehicleType** (string, required): Type of the vehicle.
+
+#### Example Request Body
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Smith"
+  },
+  "email": "janesmith@example.com",
+  "password": "yourpassword",
+  "vehicle": {
+    "color": "red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "Sedan"
+  }
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "your-jwt-token",
+  "captain": {
+    "_id": "captain-id",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Smith"
+    },
+    "email": "janesmith@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "Sedan"
+    }
+  }
+}
+```
