@@ -17,7 +17,10 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+    origin: `${process.env.CLIENT_URL}`,
+    credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
