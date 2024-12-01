@@ -167,3 +167,88 @@ The request body must be a JSON object containing the following fields:
   }
 }
 ```
+
+### Endpoint: `/captains/login`
+
+### Description
+Authenticates a captain and returns a JWT token.
+
+### Method
+`POST`
+
+### Required Data
+The request body must be a JSON object containing the following fields:
+
+- **email** (string, required): Valid email address of the captain.
+- **password** (string, required): Password for the captain account.
+
+#### Example Request Body
+```json
+{
+  "email": "janesmith@example.com",
+  "password": "yourpassword"
+}
+```
+
+#### Example Response
+```json
+{
+  "token": "your-jwt-token",
+  "captain": {
+    "_id": "captain-id",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Smith"
+    },
+    "email": "janesmith@example.com",
+    "licenseNumber": "ABC123456"
+  }
+}
+```
+
+### Endpoint: `/captains/profile`
+
+### Description
+Fetches the profile information of the authenticated captain. Requires a valid authentication token.
+
+### Method
+`GET`
+
+### Headers
+- **Authorization** (string, required): Bearer token for authentication.
+
+#### Example Response
+```json
+{
+  "captain": {
+    "_id": "captain-id",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Smith"
+    },
+    "email": "janesmith@example.com",
+    "licenseNumber": "ABC123456"
+  }
+}
+```
+
+### Endpoint: `/captains/logout`
+
+### Description
+Logs out the authenticated captain by invalidating the authentication token.
+
+### Method
+`POST`
+
+### Headers
+- **Authorization** (string, required): Bearer token for authentication.
+
+#### Example Response
+```json
+{
+  "message": "Successfully logged out"
+}
+```
+ * @access Private
+ * @header {String} Authorization - Bearer token
+ */

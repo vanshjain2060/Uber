@@ -50,7 +50,10 @@ const loginUser = async (req, res, next) => {
         }
 
         const token = user.generateAuthToken();
+        
+        //setting cookies in the response
         res.cookie('token', token, { httpOnly: true });
+        
         res.status(200).json({ token, user });
     } catch (err) {
         console.error(err);
