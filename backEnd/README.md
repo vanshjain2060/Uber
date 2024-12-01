@@ -1,6 +1,4 @@
-# Backend Api Documentation
-
-## Endpoint: `/users/register`
+### Endpoint: `/users/register`
 
 ### Description
 Registers a new user by creating an account with the provided details. Returns an authentication token and the user information upon successful registration.
@@ -44,21 +42,28 @@ The request body must be a JSON object containing the following fields:
 }
 ```
 
-### Login Route
+### Endpoint: `/api/login`
 
-**Endpoint:** `/api/login`
+### Description
+Authenticates a user and returns a JWT token.
 
-**Method:** `POST`
+### Method
+`POST`
 
-**Description:** Authenticates a user and returns a JWT token.
+### Required Data
+The request body must be a JSON object containing the following fields:
 
-**Request Body:**
+- **email** (string, required): Valid email address of the user.
+- **password** (string, required): Password for the user account.
+
+#### Example Request Body
 ```json
 {
   "email": "johndoe@example.com",
   "password": "yourpassword"
 }
 ```
+
 #### Example Response
 ```json
 {
@@ -73,6 +78,7 @@ The request body must be a JSON object containing the following fields:
   }
 }
 ```
+
 ### Endpoint: `/users/profile`
 
 ### Description
@@ -84,7 +90,7 @@ Fetches the profile information of the authenticated user. Requires a valid auth
 ### Headers
 - **Authorization** (string, required): Bearer token for authentication.
 
-### Example Response
+#### Example Response
 ```json
 {
   "user": {
@@ -109,7 +115,7 @@ Logs out the authenticated user by invalidating the authentication token.
 ### Headers
 - **Authorization** (string, required): Bearer token for authentication.
 
-### Example Response
+#### Example Response
 ```json
 {
   "message": "Successfully logged out"
@@ -131,11 +137,7 @@ The request body must be a JSON object containing the following fields:
   - **lastname** (string, optional): Last name of the captain. Must be at least 3 characters long if provided.
 - **email** (string, required): Valid email address of the captain.
 - **password** (string, required): Password for the captain account. Must be at least 6 characters long.
-- **vehicle**
-  - **color** (string, required): Color of the vehicle.
-  - **plate** (string, required): License plate number of the vehicle.
-  - **capacity** (number, required): Capacity of the vehicle.
-  - **vehicleType** (string, required): Type of the vehicle.
+- **licenseNumber** (string, required): Valid license number of the captain.
 
 #### Example Request Body
 ```json
@@ -146,12 +148,7 @@ The request body must be a JSON object containing the following fields:
   },
   "email": "janesmith@example.com",
   "password": "yourpassword",
-  "vehicle": {
-    "color": "red",
-    "plate": "XYZ123",
-    "capacity": 4,
-    "vehicleType": "Sedan"
-  }
+  "licenseNumber": "ABC123456"
 }
 ```
 
@@ -166,12 +163,7 @@ The request body must be a JSON object containing the following fields:
       "lastname": "Smith"
     },
     "email": "janesmith@example.com",
-    "vehicle": {
-      "color": "red",
-      "plate": "XYZ123",
-      "capacity": 4,
-      "vehicleType": "Sedan"
-    }
+    "licenseNumber": "ABC123456"
   }
 }
 ```
