@@ -1,18 +1,33 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserDataContext } from '../context/userContext';
+import axios from 'axios';
 
 const UserLogin = () => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [userData, setUserData] = useState({});
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { user, setUser } = useContext(UserDataContext);
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setUserData({ email, password });
+    const userData = { email, password };
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, userData);
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        navigate('/home');
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
     setEmail('');
     setPassword('');
-  }
+  };
 
   return (
     <div className='p-7 h-screen flex flex-col justify-between '>
@@ -39,13 +54,13 @@ const UserLogin = () => {
           />
           <button className='w-full bg-black text-white font-semibold px-4 py-3 rounded-md mt-3 mb-4'>Login</button>
         </form>
-        <p className='text-center'>new here? <Link to={"/signup"} className='text-blue-600'>Create new Account</Link></p>
+        <p className='text-center'>New here? <Link to={"/signup"} className='text-blue-600'>Create new Account</Link></p>
       </div>
       <div>
-      <Link to={"/captain-login"} className='flex justify-center items-center w-full bg-[#10b461] text-white font-semibold px-4 py-3 rounded-md mt-3 mb-5'>Sign in as Captain</Link>
+        <Link to={"/captain-login"} className='flex justify-center items-center w-full bg-[#10b461] text-white font-semibold px-4 py-3 rounded-md mt-3 mb-5'>Sign in as Captain</Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserLogin
+export default UserLogin;

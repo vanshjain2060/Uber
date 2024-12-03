@@ -65,11 +65,19 @@ const getUserProfile = async (req, res, next) => {
     res.status(200).json(req.user);
 }
 
+
 const logoutUser = async (req, res, next) => {
-    res.clearCookie('token');
-    const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    await BlackListToken.create({ token });
-    res.status(200).json({ message: 'Logged out successfully' });
-}   
+    try {
+        res.clearCookie('token');
+        const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+        if (token) {
+            await BlackListToken.create({ token });
+        }
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
 
 module.exports = { registerUser, loginUser , getUserProfile, logoutUser };

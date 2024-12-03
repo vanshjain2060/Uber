@@ -18,6 +18,6 @@ router.post("/login", [
 
 router.get("/profile", authUser, getUserProfile);
 
-router.get("/logout", authUser, logoutUser);
+router.post('/logout', authUser, logoutUser);
 
 module.exports = router;
