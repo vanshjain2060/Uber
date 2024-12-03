@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { CaptainDataContext } from '../context/CaptainContext';
 
 const CaptainSignup = () => {
   const [firstname, setFirstname] = useState('');
@@ -10,11 +12,13 @@ const CaptainSignup = () => {
   const [vehiclePlate, setVehiclePlate] = useState('');
   const [vehicleCapacity, setVehicleCapacity] = useState('');
   const [vehicleType, setVehicleType] = useState('');
-  const [captainData, setCaptainData] = useState({});
 
-  const submitHandler = (e) => {
+  const navigate = useNavigate();
+  const { captain, setCaptain } = useContext(CaptainDataContext);
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+    const newCaptainData = {
       fullname: { firstname, lastname },
       email,
       password,
@@ -24,8 +28,22 @@ const CaptainSignup = () => {
         capacity: vehicleCapacity,
         vehicleType: vehicleType
       }
-    });
-    // Handle form submission logic here
+    };
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, newCaptainData);
+      if (response.status === 201) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem('token', data.token);
+        navigate('/captain-home');
+      } else {
+        console.error('Unexpected response status:', response.status);
+      }
+    } catch (error) {
+      console.error('Error registering captain:', error);
+    }
+
     setFirstname('');
     setLastname('');
     setEmail('');
@@ -35,8 +53,6 @@ const CaptainSignup = () => {
     setVehicleCapacity('');
     setVehicleType('');
   };
-
-  console.log(captainData);
 
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
@@ -58,7 +74,6 @@ const CaptainSignup = () => {
               placeholder="Last Name"
               value={lastname}
               onChange={(e) => setLastname(e.target.value)}
-              required
               className='bg-[#eee] mb-7 w-1/2 px-4 py-2 rounded-md border text-lg placeholder:text-base'
             />
           </div>
@@ -80,50 +95,53 @@ const CaptainSignup = () => {
             required
             className='bg-[#eee] mb-7 w-full px-4 py-2 rounded-md border text-lg placeholder:text-base'
           />
-          <h3 className='text-lg font-medium mb-2'>Vehicle Color</h3>
-          <input
-            type="text"
-            placeholder="Vehicle Color"
-            value={vehicleColor}
-            onChange={(e) => setVehicleColor(e.target.value)}
-            required
-            className='bg-[#eee] mb-7 w-full px-4 py-2 rounded-md border text-lg placeholder:text-base'
-          />
-          <h3 className='text-lg font-medium mb-2'>Vehicle Plate</h3>
-          <input
-            type="text"
-            placeholder="Vehicle Plate"
-            value={vehiclePlate}
-            onChange={(e) => setVehiclePlate(e.target.value)}
-            required
-            className='bg-[#eee] mb-7 w-full px-4 py-2 rounded-md border text-lg placeholder:text-base'
-          />
-          <h3 className='text-lg font-medium mb-2'>Vehicle Capacity</h3>
-          <input
-            type="number"
-            placeholder="Vehicle Capacity"
-            value={vehicleCapacity}
-            onChange={(e) => setVehicleCapacity(e.target.value)}
-            required
-            className='bg-[#eee] mb-7 w-full px-4 py-2 rounded-md border text-lg placeholder:text-base'
-          />
-          <h3 className='text-lg font-medium mb-2'>Vehicle Type</h3>
-          <input
-            type="text"
-            placeholder="Vehicle Type"
-            value={vehicleType}
-            onChange={(e) => setVehicleType(e.target.value)}
-            required
-            className='bg-[#eee] mb-7 w-full px-4 py-2 rounded-md border text-lg placeholder:text-base'
-          />
-          <button className='w-full bg-black text-white font-semibold px-4 py-3 rounded-md mt-3 mb-4'>Sign Up</button>
+          <h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
+          <div className='flex gap-4'>
+            <input
+              type="text"
+              placeholder="Vehicle Color"
+              value={vehicleColor}
+              onChange={(e) => setVehicleColor(e.target.value)}
+              required
+              className='bg-[#eee] mb-7 w-1/2 px-4 py-2 rounded-md border text-lg placeholder:text-base'
+            />
+            <input
+              type="text"
+              placeholder="Vehicle Plate"
+              value={vehiclePlate}
+              onChange={(e) => setVehiclePlate(e.target.value)}
+              required
+              className='bg-[#eee] mb-7 w-1/2 px-4 py-2 rounded-md border text-lg placeholder:text-base'
+            />
+          </div>
+          <div className='flex gap-4'>
+            <input
+              type="number"
+              placeholder="Vehicle Capacity"
+              value={vehicleCapacity}
+              onChange={(e) => setVehicleCapacity(e.target.value)}
+              required
+              className='bg-[#eee] mb-7 w-1/2 px-4 py-2 rounded-md border text-lg placeholder:text-base'
+            />
+            <select
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+              required
+              className='bg-[#eee] mb-7 w-1/2 px-4 py-2 rounded-md border text-lg placeholder:text-base'
+            >
+              <option value="" disabled>Select Vehicle Type</option>
+              <option value="car">Car</option>
+              <option value="auto">Auto</option>
+              <option value="motorcycle">Motorcycle</option>
+            </select>
+          </div>
+          <button className='w-full bg-black text-white font-semibold px-4 py-3 rounded-md mt-3 mb-4'>Create Account</button>
         </form>
         <p className='text-center'>Already have an account? <Link to={"/captain-login"} className='text-blue-600'>Login</Link></p>
       </div>
       <div>
-        {/* <Link to={"/signup"} className='flex justify-center items-center w-full bg-[#d5622d] text-white font-semibold px-4 py-3 rounded-md mt-3 mb-5'>Sign up as User</Link> */}
         <p className='text-[10px] mt-10 loading-tight'>
-        to our Terms of Service and Privacy Policy, and acknowledge that you have read our <span className='underline'>Cookie Policy</span>. You also agree to receive marketing communications from Uber and can opt out at any time.
+          By signing up, you agree to our Terms of Service and Privacy Policy, and acknowledge that you have read our <span className='underline'>Cookie Policy</span>. You also agree to receive marketing communications from Uber and can opt out at any time.
         </p>
       </div>
     </div>
